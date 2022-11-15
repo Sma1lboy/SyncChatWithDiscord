@@ -1,24 +1,19 @@
 package me.sma1lboy.syncchatwithdiscord;
 
-import me.sma1lboy.syncchatwithdiscord.events.GameChatEvent;
+import me.sma1lboy.syncchatwithdiscord.spigot.events.GameChatEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import javax.security.auth.login.LoginException;
 
 public final class SyncChatWithDiscord extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-
-
         //Discord part
         //TODO sync message with server
         getConfig().getString("sdsd");
-
         // Plugin startup logic
-        getServer().getConsoleSender().sendMessage("[SyncChatWithDiscord] " + ChatColor.GREEN + "SyncChatWithDiscord Start! 1.1");
+        getServer().getConsoleSender().sendMessage("[SyncChatWithDiscord] " + ChatColor.GREEN + "SyncChatWithDiscord Start!");
         getServer().getPluginManager().registerEvents(new GameChatEvent(this), this);
         saveDefaultConfig();
     }
@@ -26,6 +21,7 @@ public final class SyncChatWithDiscord extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        getServer().getConsoleSender().sendMessage("[SyncChatWithDiscord] " + ChatColor.RED + "SyncChatWithDiscord STOP!");
     }
 
 }
