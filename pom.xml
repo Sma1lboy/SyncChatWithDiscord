@@ -71,6 +71,7 @@
     </repositories>
 
     <dependencies>
+        <!--Spigot-->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -78,10 +79,17 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--JDA-->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>5.0.0-alpha.22</version>
+        </dependency>
+        <!--dependency of parsing yml plugin-->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.33</version>
         </dependency>
     </dependencies>
 
