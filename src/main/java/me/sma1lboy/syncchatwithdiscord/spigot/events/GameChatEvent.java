@@ -2,16 +2,12 @@ package me.sma1lboy.syncchatwithdiscord.spigot.events;
 
 
 import me.sma1lboy.syncchatwithdiscord.SyncChatWithDiscord;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
+import me.sma1lboy.syncchatwithdiscord.jda.handlers.impl.JDAHandlerImpl;
 
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.internal.entities.emoji.UnicodeEmojiImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,25 +15,26 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.server.PluginDisableEvent;
-
+import org.bukkit.plugin.Plugin;
 
 
 public class GameChatEvent extends ListenerAdapter implements Listener {
 
 
     public SyncChatWithDiscord plugin;
-    public JDA jda;
-
+    public JDAHandlerImpl jdaHandler;
     public GameChatEvent(SyncChatWithDiscord plugin) {
-        this.plugin = plugin;
-        startBot();
+        startBot(plugin);
     }
 
-    private void startBot() {
-        jda = JDABuilder.createDefault(plugin.getConfig().getString("serverGeneralConfig.discordBotToken"))
-                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-                .addEventListeners(this)
-                .build();
+    /**
+     * Initial method of the class
+     * @param plugin
+     */
+    private void startBot(SyncChatWithDiscord plugin) {
+        this.plugin = plugin;
+        jdaHandler = new JDAHandlerImpl(this.plugin);
+        jdaHandler.connect();
         this.plugin.getServer().getConsoleSender().sendMessage(this.plugin.getConfig().getString("serverGeneralConfig.discordBotToken"));
     }
 
@@ -47,8 +44,7 @@ public class GameChatEvent extends ListenerAdapter implements Listener {
         //make sure it's not empty message
         if(msgReceived.length() <= 0) return;
         Player player = e.getPlayer();
-        TextChannel textChannel = jda.getTextChannelById(plugin.getConfig().getString("serverGeneralConfig.channelID"));
-        textChannel.sendMessage(player.getDisplayName() + ": " + "**" + msgReceived + "**").queue();
+        this.jdaHandler.sendMsg(player.getDisplayName() + ": " + "**" + msgReceived + "**");
     }
 
     /**
@@ -58,7 +54,7 @@ public class GameChatEvent extends ListenerAdapter implements Listener {
     @EventHandler
     public void serverShutDown(PluginDisableEvent e) {
         //TODO determine if it is restart or turn off
-        this.jda.shutdown();
+        this.jdaHandler.disconnect();
         this.plugin.getServer().getConsoleSender().sendMessage("[SyncChatWithDiscord] " + ChatColor.RED + "SyncChatWithDiscord JDA BOT SHUTDOWN!");
     }
 
