@@ -1,6 +1,0 @@
-name: SyncChatWithDiscord
-version: '1.0-SNAPSHOT'
-main: me.sma1lboy.syncchatwithdiscord.SyncChatWithDiscord
-api-version: 1.18
-authors: [ Sma1lboy ]
-description: sync the chatboard between discord and server
