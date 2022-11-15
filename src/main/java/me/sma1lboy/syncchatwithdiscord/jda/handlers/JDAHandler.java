@@ -8,6 +8,6 @@ package me.sma1lboy.syncchatwithdiscord.jda.handlers;
  */
 public interface JDAHandler {
 
-    void connection();
-    void disconnection();
+    void connect();
+    void disconnect();
 }
