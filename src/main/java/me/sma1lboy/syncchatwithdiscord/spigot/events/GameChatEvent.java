@@ -1,4 +1,4 @@
-package me.sma1lboy.syncchatwithdiscord.events;
+package me.sma1lboy.syncchatwithdiscord.spigot.events;
 
 
 import me.sma1lboy.syncchatwithdiscord.SyncChatWithDiscord;
@@ -43,11 +43,12 @@ public class GameChatEvent extends ListenerAdapter implements Listener {
 
     @EventHandler
     public void gameChatEvent(AsyncPlayerChatEvent e) {
-        String msgRecived = e.getMessage();
+        String msgReceived = e.getMessage();
+        //make sure it's not empty message
+        if(msgReceived.length() <= 0) return;
         Player player = e.getPlayer();
         TextChannel textChannel = jda.getTextChannelById(plugin.getConfig().getString("serverGeneralConfig.channelID"));
-        assert textChannel != null;
-        textChannel.sendMessage(player.getDisplayName() + ": " + "**" + msgRecived + "**").queue();
+        textChannel.sendMessage(player.getDisplayName() + ": " + "**" + msgReceived + "**").queue();
     }
 
     /**
@@ -71,11 +72,9 @@ public class GameChatEvent extends ListenerAdapter implements Listener {
             return;
         }
         //add reaction to confirm forwarding
-        e.getMessage().addReaction(Emoji.fromUnicode("\\uD83D\\uDE04")).queue();
-        e.getChannel().sendMessage(e.getChannel().getId()).queue();   // String msg = e.getMessage().getContentStripped();
-        User user = e.getAuthor();
-        e.getChannel().sendMessage(user.getName() + " " + e.getMessage().getContentRaw()).queue();
-        Bukkit.broadcastMessage("§3§l" + user.getName() + "§f§r: " +  e.getMessage().getContentStripped());
+        e.getMessage().addReaction(Emoji.fromUnicode("✅")).queue();// String msg = e.getMessage().getContentStripped();
+        String username = e.getAuthor().getAsTag();
+        Bukkit.broadcastMessage("<" + username + "> " +  e.getMessage().getContentStripped());
 
     }
 
