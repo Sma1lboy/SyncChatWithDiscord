@@ -74,15 +74,15 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.18.1-R0.1-SNAPSHOT</version>
+            <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
-    <dependency>
-        <groupId>com.github.DV8FromTheWorld</groupId>
-        <artifactId>JDA</artifactId>
-        <version>v4.4.0</version>
-    </dependency>
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>5.0.0-alpha.22</version>
+        </dependency>
     </dependencies>
 
 </project>
