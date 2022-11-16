@@ -10,8 +10,6 @@ public final class SyncChatWithDiscord extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         //Discord part
-        //TODO sync message with server
-        getConfig().getString("sdsd");
         // Plugin startup logic
         getServer().getConsoleSender().sendMessage("[SyncChatWithDiscord] " + ChatColor.GREEN + "SyncChatWithDiscord Start!");
         getServer().getPluginManager().registerEvents(new GameChatEvent(this), this);
