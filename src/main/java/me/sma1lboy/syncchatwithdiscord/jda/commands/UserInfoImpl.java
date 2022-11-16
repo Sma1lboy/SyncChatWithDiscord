@@ -1,11 +1,8 @@
 package me.sma1lboy.syncchatwithdiscord.jda.commands;
 
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.utils.data.DataObject;
-import net.dv8tion.jda.internal.JDAImpl;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Jackson Chen
@@ -15,9 +12,22 @@ import org.jetbrains.annotations.NotNull;
 public class UserInfoImpl extends ListenerAdapter {
 
     @Override
-    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent s) {
-        if(s.getName().equals("info")) {
-            //TODO embed data with player info with minecraft data if exist
-        }
+    public void onSlashCommandInteraction(SlashCommandInteractionEvent e)
+    {
+        if (!e.getName().equals("info")) return; // make sure we handle the right command
+        /*
+         * starting create the embed
+         */
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.addField("Username", "Sma1lboy#5210", true);
+        builder.addField("Minecraft Nickname", "Sma1lboy", true);
+        builder.addField("Paste Two Weeks in Game", "1 day 2hrs 🔥", true);
+        builder.addField("Daily Check Track", "128 days 🔥", false);
+        //TODO Change to local img
+        builder.setThumbnail("https://play-lh.googleusercontent.com/DJexP6PO8dL06XvNrjG7plb7SW_SaxuNamO80ab512JA71lBEBUnaJCaZzlqWVrrlEiG=w240-h480-rw");
+        builder.setAuthor("@someone");
+        //TODO add footer icon
+        builder.setFooter("@MCMsgBot");
+        e.replyEmbeds(builder.build()).setEphemeral(true).queue();
     }
 }
