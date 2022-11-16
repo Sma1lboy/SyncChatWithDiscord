@@ -33,9 +33,11 @@ public class GameChatEvent extends ListenerAdapter implements Listener {
      */
     private void startBot(SyncChatWithDiscord plugin) {
         this.plugin = plugin;
-        jdaHandler = new JDAHandlerImpl(this.plugin);
+        jdaHandler = new JDAHandlerImpl(this);
+        /*
+        jdaHandler must connect after GameChatEvent finish initialize
+         */
         jdaHandler.connect();
-        this.plugin.getServer().getConsoleSender().sendMessage(this.plugin.getConfig().getString("serverGeneralConfig.discordBotToken"));
     }
 
     @EventHandler
