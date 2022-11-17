@@ -10,9 +10,20 @@ import me.sma1lboy.syncchatwithdiscord.db.pojo.User;
  */
 public interface UserService {
     void checkDaily(String dcId);
-    void insertUser(User user);
+
     void updatingUser(User user);
     void binding(String userID,  String userUUID, String mcID, String mcUUID);
-    void createUser(String dcID, String dcUUID);
+
+
+    void insertUser(User user);
+    /**
+     * Get user by user's discord name.
+     * @param dcID
+     * @param dcUUID
+     * @return return the user if exsit, otherwise create a new one
+     */
+    User getUser(String dcID, String dcUUID);
+
+    boolean contains(String mcId);
 
 }

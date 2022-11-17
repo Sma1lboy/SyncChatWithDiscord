@@ -7,6 +7,7 @@ import me.sma1lboy.syncchatwithdiscord.db.service.UserService;
 import me.sma1lboy.syncchatwithdiscord.utils.SqlSessionUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
 
 /**
@@ -18,14 +19,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void checkDaily(String dcId) {
-    }
-
-    @Override
-    public void insertUser(User user) {
-        SqlSession session = SqlSessionUtil.getSqlSession();
-        UserMapper mapper = session.getMapper(UserMapper.class);
-        mapper.insert(user);
-        session.close();
     }
 
     @Override
@@ -50,17 +43,55 @@ public class UserServiceImpl implements UserService {
         UserExample userExmp = new UserExample();
         userExmp.createCriteria().andDcIdEqualTo(userID);
         List<User> users = mapper.selectByExample(userExmp);
-        if (users.size() == 1) { // found it
-            //TODO check if there is exist a linking
-            User user = users.get(0);
-            if(user.getMcId().length() == 0) {
-                user.setMcId(mcID);
-                user.setMcUuid(mcUUID);
-                mapper.updateByPrimaryKey(user);
-            }
+        User user = users.size() == 1 ? users.get(0) : getUser(userID, userUUID);
+        /*
+        updating
+         */
+        user.setMcId(mcID);
+        user.setMcUuid(mcUUID);
+        mapper.updateByPrimaryKey(user);
+
+        /*
+        Close session
+         */
+        session.close();
+    }
+
+
+    @Override
+    public User getUser(String dcID, String dcUUID) {
+                /*
+        get SqlSession and mapper
+        */
+        SqlSession session = SqlSessionUtil.getSqlSession();
+        UserMapper mapper = session.getMapper(UserMapper.class);
+
+        UserExample userExmp = new UserExample();
+        userExmp.createCriteria().andDcIdEqualTo(dcID);
+        List<User> users = mapper.selectByExample(userExmp);
+        User user = new User(dcID, dcUUID);
+        if (users.size() == 1) {
+            user = users.get(0);
         } else {
-            mapper.insert(new User(userID, userUUID, mcID, mcUUID));
+            mapper.insert(user);
         }
+        /*
+        Close session
+        */
+        session.close();
+
+        return user;
+    }
+
+    @Override
+    public void insertUser(User user) {
+                /*
+        get SqlSession and mapper
+         */
+        SqlSession session = SqlSessionUtil.getSqlSession();
+        UserMapper mapper = session.getMapper(UserMapper.class);
+
+        mapper.insert(user);
         /*
         Close session
          */
@@ -68,24 +99,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(String dcID, String dcUUID) {
+    public boolean contains(String mcId) {
         /*
         get SqlSession and mapper
-        */
+         */
         SqlSession session = SqlSessionUtil.getSqlSession();
         UserMapper mapper = session.getMapper(UserMapper.class);
 
-        mapper.insert(new User(dcID, dcUUID));
-
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andMcIdEqualTo(mcId);
+        int i = mapper.countByExample(userExample);
         /*
         Close session
-        */
+         */
         session.close();
+        return i != 0;
     }
 
     @Test
     public void testUserExample() {
-            binding("asd", "ken", "Sma1lboy", "Asd");
+        binding("asd", "ken", "Sma1lboy", "Asd");
 
     }
 }
