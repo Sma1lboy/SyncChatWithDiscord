@@ -6,6 +6,10 @@ import me.sma1lboy.syncchatwithdiscord.db.service.impl.UserServiceImpl;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+
+import java.time.Instant;
+import java.time.temporal.ChronoField;
 
 /**
  * @author Jackson Chen
@@ -41,6 +45,11 @@ public class UserInfoImpl extends ListenerAdapter {
         //TODO add footer icon
         builder.setFooter("@MCMsgBot");
         //TODO check button
-        e.replyEmbeds(builder.build()).setEphemeral(true).queue();
+        //determine if user able to check right now or not
+        //have to get last check from database
+        e.replyEmbeds(builder.build()).addActionRow(
+                (user.getLastTimeCheck() == null || Instant.parse(user.getLastTimeCheck()).getLong(ChronoField.INSTANT_SECONDS) - Instant.now().getLong(ChronoField.INSTANT_SECONDS)  >= 86000 ? Button.primary("checkDaily", "Check Daily") : Button.primary("checkDailyFailed", "Check😟").asDisabled())
+        ).setEphemeral(true).queue();
     }
+
 }
